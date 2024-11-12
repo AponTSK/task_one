@@ -60,13 +60,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
 // Admin Brands Routes
 Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function ()
 {
-    Route::get('brands', [BrandController::class, 'index'])->name('brands.index');
-    Route::get('brands/create', [BrandController::class, 'create'])->name('brands.create');
-    Route::post('brands', [BrandController::class, 'store'])->name('brands.store');
-    Route::get('brands/{brand}', [BrandController::class, 'show'])->name('brands.show');
-    Route::get('brands/{brand}/edit', [BrandController::class, 'edit'])->name('brands.edit');
-    Route::put('brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
-    Route::delete('brands/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::get('brand', [BrandController::class, 'index'])->name('brands.index');
+    Route::post('brand/store', [BrandController::class, 'store'])->name('brands.store');
+    Route::post('brand/update/{id}', [BrandController::class, 'update'])->name('brands.update');
+    Route::get('brand/delete/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
 });
 
 

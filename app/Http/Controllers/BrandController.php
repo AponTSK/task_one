@@ -11,9 +11,19 @@ class BrandController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
-        $brands = Brand::with('category')->get();
-        return view('admin.brands.index', compact('brands', 'categories'));
+        $brands = Brand::latest('id')->with('category')->get();
+        if (request()->ajax())
+        {
+            $html = view('admin.brands.list', compact('brands'))->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html
+            ]);
+        }
+        else
+        {
+            return view('admin.brands.index', compact('brands'));
+        }
     }
 
     public function create()
@@ -25,29 +35,6 @@ class BrandController extends Controller
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'description' => 'nullable|string',
-        //     'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        //     'category_id' => 'required|exists:categories,id',
-        // ]);
-
-        // if ($request->hasFile('image'))
-        // {
-        //     $imagePath = $request->file('image')->store('brands', 'public');
-        // }
-        // else
-        // {
-        //     $imagePath = null;
-        // }
-
-        // Brand::create([
-        //     'name' => $request->input('name'),
-        //     'description' => $request->input('description'),
-        //     'image' => $imagePath,
-        //     'category_id' => $request->input('category_id'),
-        // ]);
-        // return redirect()->route('admin.brands.index');
 
 
         $validated = $request->validate([
