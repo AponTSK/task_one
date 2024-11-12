@@ -63,7 +63,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::get('brand', [BrandController::class, 'index'])->name('brands.index');
     Route::post('brand/store', [BrandController::class, 'store'])->name('brands.store');
     Route::post('brand/update/{id}', [BrandController::class, 'update'])->name('brands.update');
-    Route::get('brand/delete/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::post('brand/delete/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
 });
 
 

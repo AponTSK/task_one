@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,7 +10,7 @@ class BrandController extends Controller
 {
     public function index()
     {
-        $brands = Brand::latest('id')->with('category')->get();
+        $brands = Brand::latest('id')->get();
         if (request()->ajax())
         {
             $html = view('admin.brands.list', compact('brands'))->render();
@@ -26,17 +25,10 @@ class BrandController extends Controller
         }
     }
 
-    public function create()
-    {
-        $categories = Category::all();
-        return view('admin.brands.create', compact('categories'));
-    }
 
 
     public function store(Request $request)
     {
-
-
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -77,49 +69,73 @@ class BrandController extends Controller
         }
     }
 
-    public function edit($id)
+    public function update(Request $request, $id)
     {
-        $brand = Brand::findOrFail($id);
-        $categories = Category::all();
-        return view('admin.brands.edit', compact('brand', 'categories'));
+        try
+        {
+
+            $brand = Brand::findOrFail($id);
+
+            $validatedData = $request->validate([
+                'name' => 'required|max:255',
+                'description' => 'nullable|max:1000',
+                'image' => 'nullable|image|max:2048',
+            ]);
+
+            $brand->name = $request->name;
+            $brand->description = $request->description;
+
+            if ($request->hasFile('image'))
+            {
+
+                if ($brand->image)
+                {
+                    Storage::delete('public/' . $brand->image);
+                }
+
+                $imagePath = $request->file('image')->store('brands', 'public');
+                $brand->image = $imagePath;
+            }
+
+            $brand->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Brand updated successfully!',
+            ]);
+        }
+        catch (\Exception $e)
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
-    public function update(Request $request, Brand $brand)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-            'category_id' => 'required|exists:categories,id',
-        ]);
 
-        if ($request->hasFile('image'))
+    public function destroy($id)
+    {
+
+        $brand = Brand::findOrFail($id);
+        $brands = Brand::latest('id')->get();
+        $brand->delete();
+        if (request()->ajax())
         {
-            if ($brand->image)
-            {
-                Storage::disk('public')->delete($brand->image);
-            }
-            $imagePath = $request->file('image')->store('brands', 'public');
+            $html = view('admin.brands.list', compact('brands'))->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html
+            ]);
         }
         else
         {
-            $imagePath = $brand->image;
+            return view('admin.brands.index', compact('brands'));
         }
 
-        $brand->update([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'image' => $imagePath,
-            'category_id' => $request->input('category_id'),
-        ]);
-
-        return redirect()->route('admin.brands.index');
-    }
-
-
-    public function destroy(Brand $brand)
-    {
-        $brand->delete();
-        return redirect()->route('admin.brands.index');
+        return response()->json([
+            'success' => true,
+            'message' => 'Brand deleted successfully!'
+        ], 200);
     }
 }
