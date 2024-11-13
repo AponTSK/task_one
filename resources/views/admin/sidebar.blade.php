@@ -10,28 +10,28 @@
                 </div>
                 <div class="ms-3">
                     <h6 class="mb-0">Jhon Doe</h6>
-                    <span>Admin</span>
+                    <span>@lang('Admin')</span>
                 </div>
             </div>
             <div class="navbar-nav w-100">
-                <a href="{{ route('admin.dashboard') }}" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="{{ route('admin.dashboard') }}" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>@lang('Dashboard')</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Categories</a>
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>@lang('Categories')</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="{{ route('admin.categories.create') }}" class="dropdown-item">Add Category</a>
-                        <a href="{{ route('admin.categories.index') }}" class="dropdown-item">Show Categories</a>
+                        <a href="{{ route('admin.categories.create') }}" class="dropdown-item">@lang('Add Category')</a>
+                        <a href="{{ route('admin.categories.index') }}" class="dropdown-item">@lang('Show Categories')</a>
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Brands</a>
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>@lang('Brands')</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="{{ route('admin.brands.index') }}" class="dropdown-item">Show Brands</a>
+                        <a href="{{ route('admin.brands.index') }}" class="dropdown-item">@lang('Show Brands')</a>
                     </div>
                 </div>
 
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Profile Settings</a>
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>@lang('Profile Settings')</a>
                 <div class="dropdown-menu bg-transparent border-0">
-                    <a href="signin.html" class="dropdown-item">Change password</a>
+                    <a href="signin.html" class="dropdown-item">@lang('Change password')</a>
                 </div>
             </div>
     </div>

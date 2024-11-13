@@ -44,15 +44,10 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        // $category->update($request->only('name'));
-
-        // return redirect()->route('admin.categories.index');
-
         $category->name = $request->input('name');
         $category->save();
         return redirect()->route('admin.categories.index');
     }
-
 
     public function destroy(Category $category)
     {

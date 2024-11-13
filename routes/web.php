@@ -20,7 +20,7 @@ Route::get('/dashboard', function ()
 
 
 
-
+//Admin Login Logout
 Route::prefix('admin')->name('admin.')->group(function ()
 {
     Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
@@ -28,19 +28,13 @@ Route::prefix('admin')->name('admin.')->group(function ()
     Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
 });
 
+
+//Admin Change Password
 Route::prefix('admin')->middleware('auth:admin')->group(function ()
 {
     Route::get('dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('changepassword', [AdminController::class, 'changePass'])->name('admin.changepass');
     Route::post('change-password', [AdminController::class, 'changePassword'])->name('change-password');
-});
-
-
-Route::middleware('auth')->group(function ()
-{
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 
@@ -52,8 +46,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
     Route::get('categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
     Route::get('categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-    Route::put('categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
-    Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+    Route::post('categories/update/{category}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::post('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
 
@@ -77,5 +71,44 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Route::middleware('auth')->group(function ()
+{
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 require __DIR__ . '/auth.php';
