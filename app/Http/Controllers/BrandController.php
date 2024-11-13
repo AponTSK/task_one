@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BrandController extends Controller
 {
@@ -27,11 +28,19 @@ class BrandController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        if ($validator->fails())
+        {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->all()
+            ]);
+        }
 
         $brand = new Brand();
         $brand->name = $request->name;
@@ -46,24 +55,30 @@ class BrandController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Brand added successfully!'
-        ], 200);
+        ]);
     }
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-
+        if ($validator->fails())
+        {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->all()
+            ]);
+        }
         $brand = Brand::find($id);
         if (!$brand)
         {
             return response()->json([
                 'success' => false,
                 'message' => 'Brand Not found.'
-            ], 404);
+            ]);
         }
         $brand->name = $request->name;
         $brand->description = $request->description;
@@ -71,15 +86,12 @@ class BrandController extends Controller
         {
             $brand->image = $request->file('image')->store('brands', 'public');
         }
-
         $brand->save();
-
         return response()->json([
             'success' => true,
             'message' => 'Brand updated successfully!'
-        ], 200);
+        ]);
     }
-
 
     public function destroy($id)
     {
@@ -87,22 +99,6 @@ class BrandController extends Controller
         $brand = Brand::findOrFail($id);
         $brands = Brand::latest('id')->get();
         $brand->delete();
-        if (request()->ajax())
-        {
-            $html = view('admin.brands.list', compact('brands'))->render();
-            return response()->json([
-                'success' => true,
-                'html' => $html
-            ]);
-        }
-        else
-        {
-            return view('admin.brands.index', compact('brands'));
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Brand deleted successfully!'
-        ], 200);
+        return redirect()->route('admin.brands.index')->with('success', 'Brands deleted successfully.');
     }
 }

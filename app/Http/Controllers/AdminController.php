@@ -30,14 +30,11 @@ class AdminController extends Controller
         ]);
 
         $user = Auth::guard('admin')->user();
-
-        // Check if the current password matches
         if (!Hash::check($request->current_password, $user->password))
         {
             return back()->withErrors(['current_password' => 'The current password does not match.']);
         }
 
-        // Update the password
         $user->password = Hash::make($request->new_password);
         $user->save();
 

@@ -1,13 +1,10 @@
-@extends('admin.layout')
-
-@section('content')
-    <!-- Form Start -->
+@extends('admin.layout') @section('content')
     <div class="row g-4">
         <div class="col-sm-12">
             <div class="bg-light rounded h-100 p-4">
-                <h6 class="mb-2">@lang('All Categories')</h6>
+                <h6 class="mb-4">@lang('All Categories')</h6>
                 <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-sm">@lang('Add New Category')</a>
-                <table class="table mt-2">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -18,20 +15,13 @@
                     <tbody>
                         @foreach ($categories as $category)
                             <tr>
-                                <td>{{ $category->id }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ __($category->name) }}</td>
-                                <td>
-                                    <!-- Edit Button -->
+                                <td class="button-container">
                                     <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-warning btn-sm">@lang('Edit')</a>
-
-                                    <!-- Delete Button -->
-                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('{{ __('Are you sure you want to delete this category?') }}')">
-                                            @lang('Delete')
-                                        </button>
-                                    </form>
-
+                                    <a class="btn btn-danger deleteBtn btn-sm" href="{{ route('admin.categories.destroy', $category->id) }}">
+                                        @lang('Delete')
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
@@ -40,14 +30,17 @@
             </div>
         </div>
     </div>
-
-    <!-- Form End -->
-
-    </div>
-    <!-- Content End -->
-
-
-    </body>
-
-    </html>
 @endsection
+
+@push('script')
+    <script>
+        $(document).ready(function() {
+            $(".deleteBtn").on("click", function(e) {
+                e.preventDefault();
+                if (confirm("@lang('Are you sure to delete this category?')")) {
+                    window.location = $(this).attr("href");
+                }
+            });
+        });
+    </script>
+@endpush

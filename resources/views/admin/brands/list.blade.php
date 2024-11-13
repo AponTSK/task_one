@@ -1,21 +1,20 @@
 @foreach ($brands as $brand)
     <tr>
-        <td>{{ $brand->id }}</td>
-        <td>{{ $brand->name }}</td>
-        <td>{{ $brand->description }}</td>
+        <td>{{ $loop->iteration }}</td>
+        <td>{{ __($brand->name) }}</td>
+        <td>{{ __($brand->description) }}</td>
         <td>
             @if ($brand->image)
-                <img src="{{ asset('storage/' . $brand->image) }}" alt="{{ __($brand->name) }}" style=" width: 100px; height: 50px;">
+                <img class="brand_image" src="{{ asset('storage/' . $brand->image) }}" alt="{{ __($brand->name) }}">
             @else
                 <span>@lang('No Image')</span>
             @endif
         </td>
         <td>
-            <!-- Edit Button -->
-            <button class="btn btn-warning edit-btn btn-sm" data-brand="{{ $brand }}">Edit</button>
-
-            <!-- Delete Button -->
-            <button data-action="{{ route('admin.brands.destroy', $brand->id) }}" class="deleteBtn btn btn-danger btn-sm delete-btn">@lang('Delete')</button>
+            <button class="btn btn-warning edit-btn btn-sm">@lang('Edit')</button>
+            <a class="btn btn-danger deleteBtn btn-sm" href="{{ route('admin.brands.destroy', $brand->id) }}">
+                @lang('Delete')
+            </a>
         </td>
     </tr>
 @endforeach

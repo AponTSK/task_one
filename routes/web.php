@@ -29,35 +29,33 @@ Route::prefix('admin')->name('admin.')->group(function ()
 });
 
 
-//Admin Change Password
-Route::prefix('admin')->middleware('auth:admin')->group(function ()
+Route::middleware("auth:admin")->prefix('admin')->name('admin.')->group(function ()
 {
-    Route::get('dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-    Route::get('changepassword', [AdminController::class, 'changePass'])->name('admin.changepass');
+    Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('change-password', [AdminController::class, 'changePass'])->name('changepass');
     Route::post('change-password', [AdminController::class, 'changePassword'])->name('change-password');
-});
+
+    // Admin Categories Routes
+    Route::prefix('categories')->name('categories.')->group(function ()
+    {
+        Route::get('/', [CategoryController::class, 'index'])->name('index');
+        Route::get('create', [CategoryController::class, 'create'])->name('create');
+        Route::post('store', [CategoryController::class, 'store'])->name('store');
+        Route::get('show/{id}', [CategoryController::class, 'show'])->name('show');
+        Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('edit');
+        Route::post('update/{id}', [CategoryController::class, 'update'])->name('update');
+        Route::get('destroy/{id}', [CategoryController::class, 'destroy'])->name('destroy');
+    });
 
 
-// Admin Categories Routes
-Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function ()
-{
-    Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
-    Route::get('categories/create', [CategoryController::class, 'create'])->name('categories.create');
-    Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
-    Route::get('categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
-    Route::get('categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-    Route::post('categories/update/{category}', [CategoryController::class, 'update'])->name('categories.update');
-    Route::post('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
-});
-
-
-// Admin Brands Routes
-Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function ()
-{
-    Route::get('brand', [BrandController::class, 'index'])->name('brands.index');
-    Route::post('brand/store', [BrandController::class, 'store'])->name('brands.store');
-    Route::post('brand/update/{id}', [BrandController::class, 'update'])->name('brands.update');
-    Route::post('brand/delete/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    // Admin Brands Routes
+    Route::prefix('brand')->name('brands.')->group(function ()
+    {
+        Route::get('/', [BrandController::class, 'index'])->name('index');
+        Route::post('store', [BrandController::class, 'store'])->name('store');
+        Route::post('update/{id}', [BrandController::class, 'update'])->name('update');
+        Route::get('delete/{id}', [BrandController::class, 'destroy'])->name('destroy');
+    });
 });
 
 
